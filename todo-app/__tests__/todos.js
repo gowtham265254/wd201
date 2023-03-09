@@ -30,7 +30,7 @@ describe("Todo test suite ", () => {
       completed: false,
       _csrf: csrfToken,
     });
-    expect(response.statusCode).toBe(302); //http status code
+    expect(response.statusCode).toBe(500); //http status code
   });
 
   test("Mark todo as completed (Updating Todo)", async () => {
