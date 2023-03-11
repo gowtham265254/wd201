@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const express = require("express");
 const app = express();
 var csrf = require("tiny-csrf");
@@ -58,7 +59,6 @@ app.get("/todos/:id", async function (request, response) {
 app.post("/todos", async (request, response) => {
   console.log("creating new todo", request.body);
   try {
-   
     await Todo.addTodo({
       title: request.body.title,
       dueDate: request.body.dueDate,
