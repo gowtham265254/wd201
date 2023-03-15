@@ -108,8 +108,7 @@ describe("Todo test cases ", () => {
     });
 
     const gropuedTodosResponse = await agent
-      .get("/todos")
-      .set("Accept", "application/json");
+      .get("/todos");
     const parsedGroupedResponseses = JSON.parse(gropuedTodosResponse.text);
     const latestTodo = parsedGroupedResponseses[parsedGroupedResponseses.length - 1];
 
