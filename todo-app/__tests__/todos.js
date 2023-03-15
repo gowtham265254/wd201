@@ -3,7 +3,6 @@ const request = require("supertest");
 var cheerio = require("cheerio");
 const db = require("../models/index");
 const app = require("../app");
-//const todo = require("../models/todo");
 let server, agent;
 
 function extractCsrfToken(res) {
@@ -112,12 +111,12 @@ describe("Todo test cases ", () => {
       .get("/todos")
       .set("Accept", "application/json");
     const parsedGroupedResponseses = JSON.parse(gropuedTodosResponse.text);
-    const latestTodo = parsedGroupedResponseses[parsedGroupedResponseses.length - 1].id;
+    const latestTodo = parsedGroupedResponseses[parsedGroupedResponseses.length - 1];
 
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
 
-    const response = await agent.put(`todos/${latestTodo}`).send({
+    const response = await agent.put(`todos/${latestTodo.id}`).send({
       _csrf: csrfToken,
     });
     const parsedUpdateResponses = JSON.parse(response.text);
