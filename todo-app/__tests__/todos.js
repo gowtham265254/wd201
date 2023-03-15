@@ -83,7 +83,7 @@ describe("Todo test cases ", () => {
       .set("Accept", "application/json");
     const parsedGroupedResponse = JSON.parse(gropuedTodosResponse.text);
     const latestTodo = parsedGroupedResponse[parsedGroupedResponse.length - 1];
-    const status = parsedGroupedResponse[parsedGroupedResponse.length - 1].completed ? false : true;
+    const status = parsedGroupedResponse.completed ? false : true;
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
 
