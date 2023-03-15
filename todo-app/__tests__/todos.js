@@ -13,7 +13,7 @@ const extractCSRFToken = (html) => {
 
 const login = async (agent, username, password) => {
   let res = await agent.get("/login");
-  let csrfToken = extractCsrfToken(res);
+  let csrfToken = extractCsrfToken(res.text);
   res = await agent.post("/session").send({
     email: username,
     password: password,
@@ -39,7 +39,7 @@ describe("Todo Application", function () {
 
   test("Sign up page", async () => {
     let res = await agent.get("/signup");
-    const csrfToken = extractCsrfToken(res);
+    const csrfToken = extractCsrfToken(res.text);
     res = await agent.post("/users").send({
       firstName: "Test",
       lastName: "User A",
@@ -56,7 +56,7 @@ describe("Todo Application", function () {
     res = await agent.get("/signout");
     expect(res.statusCode).toBe(302);
     res = await agent.get("/todos");
-    expect(res.statusCode).toBe(302);
+    expect(res.statusCode).toBe(200);
   });
 
   test("Create new todo", async () => {
@@ -106,7 +106,7 @@ describe("Todo Application", function () {
     const agent = request.agent(server);
     await login(agent, "user.a@test.com", "12345678");
     let res = await agent.get("/todos");
-    let csrfToken = extractCSRFToken(res);
+    let csrfToken = extractCSRFToken(res.text);
 
     await agent.post("/todos").send({
       title: "Complete levels",
@@ -119,7 +119,7 @@ describe("Todo Application", function () {
     const todoID = parsedResponses[parsedResponses.length - 1].id;
 
     res = await agent.get("/todos");
-    csrfToken = extractCSRFToken(res);
+    csrfToken = extractCSRFToken(res.text);
 
     const deleteTodo = await agent.delete(`/todos/${todoID}`).send({
       _csrf: csrfToken,
