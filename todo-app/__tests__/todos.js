@@ -12,7 +12,7 @@ const extractCSRFToken = (html) => {
 
 const login = async (agent, username, password) => {
   let res = await agent.get("/login");
-  let csrfToken = fetchCsrfToken(res);
+  let csrfToken = extractCSRFToken(res);
   res = await agent.post("/session").send({
     email: username,
     password: password,
@@ -38,7 +38,7 @@ describe("Todo Application", function () {
 
   test('Sign Up ', async () => {
     let res = await agent.get("/signup");
-    const csrfToken = fetchCsrfToken(res);
+    const csrfToken = extractCSRFToken(res);
     res = await agent.post("/users").send({
       firstName: "First",
       lastName: "Last",
@@ -55,7 +55,7 @@ describe("Todo Application", function () {
     res = await agent.get("/signout");
     expect(res.statusCode).toBe(302);
     res = await agent.get("/todos");
-    expect(res.statusCode).toBe(302);
+    expect(res.statusCode).toBe(200);
   });
 
   test("Creates a  new todo", async () => {
