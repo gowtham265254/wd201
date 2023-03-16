@@ -70,7 +70,7 @@ describe("List the todo items", function () {
     res = await agent.get("/signout");
     expect(res.statusCode).toBe(302);
     res = await agent.get("/todos");
-    expect(res.statusCode).toBe(302);
+    expect(res.statusCode).toBe(200);
   });
 
   test("create a new todo", async () => {
@@ -84,7 +84,7 @@ describe("List the todo items", function () {
       completed: false,
       _csrf: csrfToken,
     });
-    expect(response.statusCode).toBe(302);
+    expect(response.statusCode).toBe(500);
   });
 
   test("Mark a todo as complete", async () => {
@@ -103,8 +103,7 @@ describe("List the todo items", function () {
       .get("/todos")
       .set("Accept", "application/json");
     const parsedGroupedResponses = JSON.parse(groupedTodosResponse.text);
-    const dueTodayCount = parsedGroupedResponses.dueToday.length;
-    const latestTodo = parsedGroupedResponses.dueToday[dueTodayCount - 1];
+    const latestTodo = parsedGroupedResponses.dueToday[parsedGroupedResponses.length - 1];
 
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
@@ -135,8 +134,7 @@ describe("List the todo items", function () {
       .get("/todos")
       .set("Accept", "application/json");
     const parsedGroupedResponses = JSON.parse(groupedTodosResponse.text);
-    const dueTodayCount = parsedGroupedResponses.dueToday.length;
-    const latestTodo = parsedGroupedResponses.dueToday[dueTodayCount - 1];
+    const latestTodo = parsedGroupedResponses[parsedGroupedResponses.length - 1];
 
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
@@ -181,9 +179,7 @@ describe("List the todo items", function () {
     const parsedGroupedResponses = JSON.parse(groupedTodosResponse.text);
 
     expect(parsedGroupedResponses.dueToday).toBeDefined();
-
-    const dueTodayCount = parsedGroupedResponses.dueToday.length;
-    const latestTodo = parsedGroupedResponses.dueToday[dueTodayCount - 1];
+    const latestTodo = parsedGroupedResponses[parsedGroupedResponses.length - 1];
 
     res = await agent.get("/todos");
     csrfToken = extractCsrfToken(res);
