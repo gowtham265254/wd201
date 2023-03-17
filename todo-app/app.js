@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require("express"); //importing express
 var csrf = require("tiny-csrf");
-const app = express();
+const app = express(); // creating new application
 const bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 app.use(bodyParser.json());
@@ -84,7 +84,7 @@ app.get("/", async (request, response) => {
 });
 
 app.get(
-  "/todo",
+  "/todos",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     const loggedInUser = request.user.id;
@@ -142,7 +142,7 @@ app.post("/users", async (request, response) => {
       if (err) {
         console.log(err);
       }
-      response.redirect("/todo");
+      response.redirect("/todos");
     });
   } catch (error) {
     console.log(error);
@@ -161,7 +161,7 @@ app.post(
   }),
   function (request, response) {
     console.log(request.user);
-    response.redirect("/todo");
+    response.redirect("/todos");
   }
 );
 app.get("/signout", (request, response, next) => {
@@ -199,11 +199,11 @@ app.post(
   async (request, response) => {
     if (request.body.title.length == 0) {
       request.flash("error", "Title can not be empty!");
-      return response.redirect("/todo");
+      return response.redirect("/todos");
     }
     if (request.body.dueDate.length == 0) {
       request.flash("error", "Due date can not be empty!");
-      return response.redirect("/todo");
+      return response.redirect("/todos");
     }
     console.log("creating new todo", request.body);
     try {
@@ -213,7 +213,7 @@ app.post(
         completed: false,
         userId: request.user.id,
       });
-      return response.redirect("/todo");
+      return response.redirect("/todos");
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);
@@ -257,7 +257,7 @@ app.delete(
     console.log("delete a todo with ID:", request.params.id);
     try {
       await Todo.remove(request.params.id, request.user.id);
-      return response.json({ success: true });
+      return response.json(true);
     } catch (error) {
       return response.status(422).json(error);
     }
